@@ -1,0 +1,49 @@
+{
+  "containerDefinitions": [
+    {
+      "essential": true,
+      "image": "%AWS_ECR_ACCOUNT_URL%/%PROJECT_NAME%:%BRANCH%-latest",
+      "memoryReservation": 50,
+      "name": "laravel"
+    },
+    {
+      "command": [
+        "php",
+        "artisan",
+        "queue:listen",
+        "--timeout=10800",
+        "--tries=1",
+        "--verbose"
+      ],
+      "environment": [
+        { "name": "APP_ENV", "value": "%BRANCH%" }
+      ],
+      "essential": true,
+      "image": "%AWS_ECR_ACCOUNT_URL%/%REPONAME_LOWERCASE%:%IMAGE_TAG%",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "ecs-awslogs-%BRANCH%",
+          "awslogs-region": "%AWS_DEFAULT_REGION%",
+          "awslogs-stream-prefix": "Repo-%REPONAME%_Workflow-%WORKFLOW_ID%"
+        }
+      },
+      "memoryReservation": 350,
+      "name": "queue",
+      "secrets": [
+        {
+          "name": "SECRETS",
+          "valueFrom": "arn:aws:secretsmanager:%AWS_DEFAULT_REGION%:%AWS_ACCOUNT_ID%:secret:%PROJECT_NAME%-env-vars-%BRANCH%"
+        }
+      ],
+      "volumesFrom": [
+        {
+          "sourceContainer": "laravel"
+        }
+      ]
+    }
+  ],
+  "executionRoleArn": "arn:aws:iam::%AWS_ACCOUNT_ID%:role/ecsTaskExecutionRole",
+  "family": "%REPONAME%-%BRANCH%-task-definition"
+}

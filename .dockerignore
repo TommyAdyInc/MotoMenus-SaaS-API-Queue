@@ -1,0 +1,11 @@
+.circleci
+.git
+.idea
+.vscode
+
+.dockerignore
+.gitattributes
+.gitignore
+Dockerfile
+README.md
+task-definition.json
