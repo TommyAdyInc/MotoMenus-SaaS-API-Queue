@@ -22,6 +22,7 @@ jobs:
             echo 'export CIRCLE_PROJECT_REPONAME_LOWERCASE=$(echo "$CIRCLE_PROJECT_REPONAME" | tr '[:upper:]' '[:lower:]')' >> $BASH_ENV
             # Lop off the last element from the back of the string using a dash (-) as the delimiter.
             echo 'export PROJECT_NAME=${CIRCLE_PROJECT_REPONAME%-*}' >> $BASH_ENV
+            echo 'export PROJECT_NAME_LOWERCASE=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')' >> $BASH_ENV
       - run:
           name: Make necessary replacements in task definition file
           command: |
@@ -32,6 +33,7 @@ jobs:
             sed -i -e "s;%BRANCH%;${CIRCLE_BRANCH};g" task-definition.json
             sed -i -e "s;%IMAGE_TAG%;Branch-${CIRCLE_BRANCH}_Workflow-${CIRCLE_WORKFLOW_ID};g" task-definition.json
             sed -i -e "s;%PROJECT_NAME%;${PROJECT_NAME};g" task-definition.json
+            sed -i -e "s;%PROJECT_NAME_LOWERCASE%;${PROJECT_NAME_LOWERCASE};g" task-definition.json
             sed -i -e "s;%REPONAME%;${CIRCLE_PROJECT_REPONAME};g" task-definition.json
             sed -i -e "s;%REPONAME_LOWERCASE%;${CIRCLE_PROJECT_REPONAME_LOWERCASE};g" task-definition.json
             sed -i -e "s;%WORKFLOW_ID%;${CIRCLE_WORKFLOW_ID};g" task-definition.json

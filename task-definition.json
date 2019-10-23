@@ -2,7 +2,7 @@
   "containerDefinitions": [
     {
       "essential": true,
-      "image": "%AWS_ECR_ACCOUNT_URL%/%PROJECT_NAME%:%BRANCH%-latest",
+      "image": "%AWS_ECR_ACCOUNT_URL%/%PROJECT_NAME_LOWERCASE%:%BRANCH%-latest",
       "memoryReservation": 50,
       "name": "laravel"
     },
