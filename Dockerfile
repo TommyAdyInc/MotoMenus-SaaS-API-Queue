@@ -1,8 +1,7 @@
 FROM php:7.3.9-alpine3.10
 
 RUN apk add --no-cache \
-    libzip-dev \
-    mysql-client
+    libzip-dev
 
 RUN docker-php-ext-install \
     bcmath \
